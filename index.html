@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Guessing Game</title>
+
+    <!-- Bootstrap and CSS here-->
+    <style>
+      .center {
+        text-align: center;
+      }
+
+      ul {
+          list-style: none;
+          padding: 0;
+      }
+
+      img {
+          display: inline;
+          width: 220px;
+          height: 80px;
+      }
+
+      #footer {
+          width: 100%;
+          margin-right: 20px;
+          display: inline-block;
+          border-top: solid 2px black;
+          background-color: white;
+          position: fixed;
+          bottom: 0;
+      }
+
+      #number {
+        width: 120px;
+        height: 120px;
+        text-align: center;
+        font-size: 40px;
+        border-radius: 60px;
+        box-shadow: 3px 3px 3px 3px black;
+      }
+
+      #headers {
+        margin: 30px auto 20px auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-image: url('header2.png');
+        height: 120px;
+        border: solid 2px black; 
+      }
+
+      .bottom1 {
+        display: inline-block;
+        width: 33%;
+        float: left;
+      }
+
+      .bottom2 {
+        display: inline-block;
+        text-align: center;
+        width: 33%;
+        margin: auto;
+      }
+
+      .bottom3 {
+        display: inline-block;
+        margin-right: 20px;
+        float: right;
+      }
+
+      body {
+          background-image: url('numbers.png');
+      }
+
+      .memory {  
+          width: 55px;
+          height: 50px;
+          border: solid 2px black;
+          text-align: center;
+          font-size: 30px;
+          vertical-align: center;  
+          background-color: white;
+          box-shadow: 1px 1px grey;
+          border-radius: 10px;
+      }
+
+      #start {
+          width: 60px;
+          height: 60px;
+          font-size: 20px;
+          border-radius: 30px;
+          margin-left: -20px;
+          margin-top: 20px;
+          box-shadow: 3px 3px 3px black;
+          background-color: olivedrab;
+      }
+
+      h1, h2 {
+          text-align: center;
+      }
+
+      h1 {
+          color: white;
+      }
+
+      table {
+          margin: auto;
+      }
+
+      #reset, #hint {
+          border-radius: 5px;
+          width: 60px;
+          height: 30px;
+          font-size: 16px;
+          background-color: orange;
+      }
+
+      #reset:hover, #hint:hover {
+          background-color: black;
+          color: orange;
+      }
+
+      #start:hover {
+          background-color: yellowgreen;
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+      <div id='app'>
+
+        <div id='headers'>
+          <!-- Title and subtitles! -->
+          <h1>Guessing Game!</h1>
+          <h2>Guess a number between 1-100!</h2>
+        </div>
+
+        <div id='main'>
+          <div id='input-parent'>
+            <!-- Player's guess input, and submit button -->
+            <table>
+				<tr>
+					<td><input type="text" id="number" placeholder="#" maxlength='3' autofocus="autofocus" value="#"></td>
+                    <td><input type="button" id="start" value="Go!" onclick="#"></td>
+                </tr>
+		    </table>    
+          </div>
+
+          <div id='guesses'>
+            <!-- unordered list of guesses -->
+            <table>
+				<tr>
+                    <td><p class="memory">-</p></td>
+                    <td><p class="memory">-</p></td>
+                    <td><p class="memory">-</p></td>
+                    <td><p class="memory">-</p></td>
+                    <td><p class="memory">-</p></td>
+                </tr>
+		    </table> 
+
+          </div>
+
+          <div id="menu-btns">
+            <!-- reset and hint buttons -->
+            <table>
+				<tr>
+					<td><input type="button" id="reset" value="Reset" onclick="#"></td>
+                    <td><input type="button" id="hint" value="Hint" onclick="#"></td>
+                </tr>
+		    </table>
+          </div>
+        </div>
+      </div>
+
+
+
+    <div id='footer'>
+        <div>
+          <div class='bottom1'>
+            <img src='fa-logo@2x.png'></img>
+          </div>
+
+          <div class='bottom2'>
+            <h4>Project by Andres Santos</h4>
+          </div>
+
+          <div class='bottom3'>
+            <img src='grace_hopper_academy.png'></img>
+          </div>
+
+        </div>
+    </div>
+
+  </body>
+</html>
