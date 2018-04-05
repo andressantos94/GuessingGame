@@ -117,6 +117,156 @@
 
     </style>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var numb;
+      var game;
+      $(document).ready(function(){
+        game = newGame();
+        $("#start").click(function(){
+          numb=$("#number").val();
+          $("#number").val('');
+          var response = Game.prototype.playersGuessSubmission.call(game,numb);
+          var lower = Game.prototype.isLower.call(game);
+          $("#title").text(response);
+          printGuesses(game.pastGuesses);
+          if(response==='You Win!'||response==='You Lose!'){
+            $("#subtitle").text("Press the reset button to play again");
+            $('#start').hide();
+            $('#hint').hide();
+          }else if(lower){
+            $("#subtitle").text("Guess Higher!");
+          }else{
+            $("#subtitle").text("Guess Lower!");
+          }
+          console.log(response,'response');
+          
+        });
+        $("#reset").click(function(){
+          game = newGame();
+          clean();
+          $("#start").show();
+          $("#hint").show();
+          $("#number").text('');
+          $("#title").text('Guessing Game!');
+          $("#subtitle").text('Guess a number between 1-100!');
+        });
+        $("#hint").click(function(){
+          var numbers=Game.prototype.provideHint.call(game);
+          console.log(numbers,'numbers'); 
+          $("#title").text('The winning number is: '+numbers.join(','));
+        });
+      });
+
+      function printGuesses(arr){
+        var ps = document.getElementsByTagName('p');
+        console.log(ps,'ps',arr,'arr');
+        for(var i=0;i<arr.length;i++){
+          ps[i].innerHTML = arr[i];
+        }
+      }
+
+      function clean(){
+        var ps = document.getElementsByTagName('p');
+        for(var i=0;i<ps.length;i++){
+          ps[i].innerHTML = '-';
+        }
+      }
+
+      function generateWinningNumber(){
+          var result=Math.floor(Math.random()*100)+1;
+          if(result===0){
+              return 1;
+          }else{
+            console.log(result,'result');
+              return result;
+          }
+      }
+
+      function shuffle(arr){
+          var j;
+          var aux,aux2;
+          console.log(arr.length,'arr.length');
+          for(var i=arr.length-1;i>=0;i--){
+              j=Math.round(Math.random()*(arr.length-1));
+              console.log(j,'j',i,'i');
+              if(j!==i){
+                console.log(arr,'arr');
+                  console.log(arr[j],'arr[j]',arr[i],'arr[i]');
+                  aux = arr[j];
+                  aux2=arr[i];
+                  arr[j]=aux2;
+                  arr[i]=aux;
+                  console.log(aux,aux2,arr[j],arr[i]);
+              }
+          }
+          console.log(arr,'arr');
+          return arr;
+      }
+
+      function Game(){
+          this.playersGuess=null;
+          this.pastGuesses=[];
+          this.winningNumber=generateWinningNumber();
+          console.log(this.winningNumber,'this.winningNumber in Game');
+      }
+
+      Game.prototype.difference=function(){
+          return this.playersGuess-this.winningNumber<0?this.winningNumber-this.playersGuess:this.playersGuess-this.winningNumber;
+      }
+
+      Game.prototype.isLower=function(){
+          return this.playersGuess<this.winningNumber;
+      }
+
+      Game.prototype.playersGuessSubmission=function(num){
+          if(num<1||num>100||isNaN(num)){
+              throw 'That is an invalid guess.';
+          }else{
+              this.playersGuess=num;
+              return this.checkGuess();
+          }    
+      }
+
+      Game.prototype.checkGuess=function(){
+        console.log(this,'this',this.playersGuess,'playersGuess',this.winningNumber,'winningNumber');
+          if(Number(this.playersGuess)===this.winningNumber){
+              return 'You Win!';
+          }else if(this.pastGuesses.indexOf(this.playersGuess)>-1){
+              return 'You have already guessed that number.';
+          }else if(this.pastGuesses.indexOf(this.playersGuess)===-1){
+              this.pastGuesses.push(this.playersGuess);
+             if(this.pastGuesses.length<5){
+                  if(this.difference()<10){
+                      return 'You\'re burning up!';
+                  }else if(this.difference()<25){
+                      return 'You\'re lukewarm.';
+                  }else if(this.difference()<50){
+                      return 'You\'re a bit chilly.';
+                  }else if(this.difference()<100){
+                      return 'You\'re ice cold!';
+                  }
+             }else if(this.pastGuesses.length===5){
+                  return 'You Lose.';
+             }  
+          }
+      }
+
+      function newGame(){
+          return new Game;
+      }
+
+      Game.prototype.provideHint=function(){
+          var newArr=[];
+          console.log(this.winningNumber,'this.winningNumber in provideHint');
+          newArr.push(this.winningNumber);
+          newArr.push(generateWinningNumber());
+          newArr.push(generateWinningNumber());
+          return shuffle(newArr);
+      }
+
+  </script>
+
   </head>
   <body>
 
@@ -133,7 +283,7 @@
             <!-- Player's guess input, and submit button -->
             <table>
               <tr>
-                <td><input type="text" id="number" placeholder="#" maxlength='3' autofocus="autofocus" value="#"></td>
+                <td><input type="text" id="number" placeholder="#" maxlength='3' autofocus="autofocus" value=""></td>
                 <td><input type="button" id="start" value="Go!" onclick=""></td>
               </tr>
             </table>    
@@ -143,7 +293,7 @@
             <!-- unordered list of guesses -->
             <table>
 				      <tr>
-                <td><p class="memory">-</p></td>
+                <td><p id='mem1' class="memory">-</p></td>
                 <td><p class="memory">-</p></td>
                 <td><p class="memory">-</p></td>
                 <td><p class="memory">-</p></td>
@@ -155,11 +305,11 @@
           <div id="menu-btns">
             <!-- reset and hint buttons -->
             <table>
-				<tr>
-					<td><input type="button" id="reset" value="Reset" onclick=""></td>
-                    <td><input type="button" id="hint" value="Hint" onclick=""></td>
+				        <tr>
+					        <td><input type="button" id="reset" value="Reset" onclick=""></td>
+                  <td><input type="button" id="hint" value="Hint" onclick=""></td>
                 </tr>
-		    </table>
+		        </table>
           </div>
         </div>
       </div>
