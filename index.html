@@ -123,11 +123,16 @@
       var game;
       $(document).ready(function(){
         game = newGame();
+
         $("#start").click(function(){
+          startNumber();
+        });
+
+        function startNumber(){
           numb=$("#number").val();
           $("#number").val('');
-          var response = Game.prototype.playersGuessSubmission.call(game,numb);
-          var lower = Game.prototype.isLower.call(game);
+          var response = game.playersGuessSubmission(numb);
+          var lower = game.isLower();
           $("#title").text(response);
           printGuesses(game.pastGuesses);
           if(response==='You Win!'||response==='You Lose!'){
@@ -140,8 +145,14 @@
             $("#subtitle").text("Guess Lower!");
           }
           console.log(response,'response');
-          
-        });
+        }
+
+        $("#number").keypress(function(code){
+          if(code.keyCode===13){
+            startNumber();
+          }
+        })
+
         $("#reset").click(function(){
           game = newGame();
           clean();
